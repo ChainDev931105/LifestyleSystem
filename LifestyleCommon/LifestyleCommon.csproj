@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4CEFD8CD-1427-4193-8BB8-95586FCC3361}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LifestyleCommon</RootNamespace>
+    <AssemblyName>LifestyleCommon</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CSharpAPI">
+      <HintPath>..\packages\CSharpAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="EasyNetQ, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyNetQ.5.6.0\lib\net461\EasyNetQ.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySqlConnector">
+      <HintPath>..\packages\MySqlConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.6.2.1\lib\net461\RabbitMQ.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Channels, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Channels.4.7.1\lib\net461\System.Threading.Channels.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChartCon.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Global.cs" />
+    <Compile Include="IBSite.cs" />
+    <Compile Include="IB\IBClient.cs" />
+    <Compile Include="IB\messages\AccountDownloadEndMessage.cs" />
+    <Compile Include="IB\messages\AccountSummaryEndMessage.cs" />
+    <Compile Include="IB\messages\AccountSummaryMessage.cs" />
+    <Compile Include="IB\messages\AccountUpdateMultiEndMessage.cs" />
+    <Compile Include="IB\messages\AccountUpdateMultiMessage.cs" />
+    <Compile Include="IB\messages\AccountValueMessage.cs" />
+    <Compile Include="IB\messages\AdvisorDataMessage.cs" />
+    <Compile Include="IB\messages\BondContractDetailsMessage.cs" />
+    <Compile Include="IB\messages\CommissionMessage.cs" />
+    <Compile Include="IB\messages\CompletedOrderMessage.cs" />
+    <Compile Include="IB\messages\ConnectionStatusMessage.cs" />
+    <Compile Include="IB\messages\ContractDetailsEndMessage.cs" />
+    <Compile Include="IB\messages\ContractDetailsMessage.cs" />
+    <Compile Include="IB\messages\DeepBookMessage.cs" />
+    <Compile Include="IB\messages\ErrorMessage.cs" />
+    <Compile Include="IB\messages\ExecutionMessage.cs" />
+    <Compile Include="IB\messages\FamilyCodesMessage.cs" />
+    <Compile Include="IB\messages\FundamentalsMessage.cs" />
+    <Compile Include="IB\messages\HeadTimestampMessage.cs" />
+    <Compile Include="IB\messages\HistogramDataMessage.cs" />
+    <Compile Include="IB\messages\HistoricalDataEndMessage.cs" />
+    <Compile Include="IB\messages\HistoricalDataMessage.cs" />
+    <Compile Include="IB\messages\HistoricalNewsEndMessage.cs" />
+    <Compile Include="IB\messages\HistoricalNewsMessage.cs" />
+    <Compile Include="IB\messages\HistoricalTickBidAskEndMessage.cs" />
+    <Compile Include="IB\messages\HistoricalTickBidAskMessage.cs" />
+    <Compile Include="IB\messages\HistoricalTickEndMessage.cs" />
+    <Compile Include="IB\messages\HistoricalTickLastEndMessage.cs" />
+    <Compile Include="IB\messages\HistoricalTickLastMessage.cs" />
+    <Compile Include="IB\messages\HistoricalTickMessage.cs" />
+    <Compile Include="IB\messages\ManagedAccountsMessage.cs" />
+    <Compile Include="IB\messages\MarketDataMessage.cs" />
+    <Compile Include="IB\messages\MarketDataTypeMessage.cs" />
+    <Compile Include="IB\messages\MarketRuleMessage.cs" />
+    <Compile Include="IB\messages\MktDepthExchangesMessage.cs" />
+    <Compile Include="IB\messages\NewsArticleMessage.cs" />
+    <Compile Include="IB\messages\NewsProvidersMessage.cs" />
+    <Compile Include="IB\messages\OpenOrderMessage.cs" />
+    <Compile Include="IB\messages\OrderBoundMessage.cs" />
+    <Compile Include="IB\messages\OrderMessage.cs" />
+    <Compile Include="IB\messages\OrderStatusMessage.cs" />
+    <Compile Include="IB\messages\PnLMessage.cs" />
+    <Compile Include="IB\messages\PnLSingleMessage.cs" />
+    <Compile Include="IB\messages\PositionMessage.cs" />
+    <Compile Include="IB\messages\PositionMultiEndMessage.cs" />
+    <Compile Include="IB\messages\PositionMultiMessage.cs" />
+    <Compile Include="IB\messages\RealTimeBarMessage.cs" />
+    <Compile Include="IB\messages\ScannerEndMessage.cs" />
+    <Compile Include="IB\messages\ScannerMessage.cs" />
+    <Compile Include="IB\messages\ScannerParametersMessage.cs" />
+    <Compile Include="IB\messages\SecurityDefinitionOptionParameterEndMessage.cs" />
+    <Compile Include="IB\messages\SecurityDefinitionOptionParameterMessage.cs" />
+    <Compile Include="IB\messages\SoftDollarTiersMessage.cs" />
+    <Compile Include="IB\messages\SymbolSamplesMessage.cs" />
+    <Compile Include="IB\messages\TickByTickAllLastMessage.cs" />
+    <Compile Include="IB\messages\TickByTickBidAskMessage.cs" />
+    <Compile Include="IB\messages\TickByTickMidPointMessage.cs" />
+    <Compile Include="IB\messages\TickNewsMessage.cs" />
+    <Compile Include="IB\messages\TickOptionMessage.cs" />
+    <Compile Include="IB\messages\TickPriceMessage.cs" />
+    <Compile Include="IB\messages\TickReqParamsMessage.cs" />
+    <Compile Include="IB\messages\TickSizeMessage.cs" />
+    <Compile Include="IB\messages\UpdateAccountTimeMessage.cs" />
+    <Compile Include="IB\messages\UpdatePortfolioMessage.cs" />
+    <Compile Include="IB\types\FinancialAdvisorTypes.cs" />
+    <Compile Include="IB\types\IBTypes.cs" />
+    <Compile Include="MySQL.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RabbitMQ.cs" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

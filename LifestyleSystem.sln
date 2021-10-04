@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifestyleTrader", "LifestyleTrader\LifestyleTrader.csproj", "{46BD74A8-2705-415D-874D-E6F22399D37F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifestyleManager", "LifestyleManager\LifestyleManager.csproj", "{87B39302-F3B1-41C1-A339-6D95EB9EFAC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifestyleCommon", "LifestyleCommon\LifestyleCommon.csproj", "{4CEFD8CD-1427-4193-8BB8-95586FCC3361}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfSciChart", "WpfSciChart\WpfSciChart.csproj", "{CF3429BF-7BF6-4E59-A1D6-9EF4F4B34703}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifestyleChart", "LifestyleChart\LifestyleChart.csproj", "{FF95C81E-6C94-4BEA-9FD3-33F5DD5D50AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LifestyleStrategy", "LifestyleStrategy\LifestyleStrategy.csproj", "{7A53EC1C-5CCE-45F6-B098-1E63BD8C6B5B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{46BD74A8-2705-415D-874D-E6F22399D37F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46BD74A8-2705-415D-874D-E6F22399D37F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46BD74A8-2705-415D-874D-E6F22399D37F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46BD74A8-2705-415D-874D-E6F22399D37F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87B39302-F3B1-41C1-A339-6D95EB9EFAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87B39302-F3B1-41C1-A339-6D95EB9EFAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87B39302-F3B1-41C1-A339-6D95EB9EFAC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87B39302-F3B1-41C1-A339-6D95EB9EFAC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CEFD8CD-1427-4193-8BB8-95586FCC3361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CEFD8CD-1427-4193-8BB8-95586FCC3361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CEFD8CD-1427-4193-8BB8-95586FCC3361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CEFD8CD-1427-4193-8BB8-95586FCC3361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF3429BF-7BF6-4E59-A1D6-9EF4F4B34703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF3429BF-7BF6-4E59-A1D6-9EF4F4B34703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF3429BF-7BF6-4E59-A1D6-9EF4F4B34703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF3429BF-7BF6-4E59-A1D6-9EF4F4B34703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF95C81E-6C94-4BEA-9FD3-33F5DD5D50AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF95C81E-6C94-4BEA-9FD3-33F5DD5D50AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF95C81E-6C94-4BEA-9FD3-33F5DD5D50AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF95C81E-6C94-4BEA-9FD3-33F5DD5D50AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A53EC1C-5CCE-45F6-B098-1E63BD8C6B5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A53EC1C-5CCE-45F6-B098-1E63BD8C6B5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A53EC1C-5CCE-45F6-B098-1E63BD8C6B5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A53EC1C-5CCE-45F6-B098-1E63BD8C6B5B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

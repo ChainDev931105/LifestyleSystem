@@ -1,0 +1,120 @@
+﻿<UserControl
+            x:Class="WpfSciStockChart.ucSciStockChart"
+            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ext="http://schemas.abtsoftware.co.uk/scichart/exampleExternals"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:s="http://schemas.abtsoftware.co.uk/scichart"
+             d:DesignHeight="400"
+             d:DesignWidth="600"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <ext:DoubleToGridLengthConverter x:Key="DoubleToGridLengthConverter" />
+
+        <Style x:Key="LegendStyle" TargetType="s:LegendModifier">
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="LegendPlacement" Value="Inside" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="ShowSeriesMarkers" Value="True" />
+            <Setter Property="ShowVisibilityCheckboxes" Value="True" />
+        </Style>
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Background="#FF232426"
+                BorderBrush="#323539"
+                BorderThickness="0,0,2,0"
+                Canvas.ZIndex="9999">
+
+
+        </Border>
+        <!--  Define the StockChart control, binding to PriceData  -->
+        <s:SciStockChart x:Name="PriceChart"
+                         Grid.Column="1"
+                         LegendStyle="{StaticResource LegendStyle}"
+                         >
+
+            <s:SciStockChart.RenderableSeries>
+                <s:FastCandlestickRenderableSeries />
+                <s:FastCandlestickRenderableSeries />
+                <s:XyScatterRenderableSeries>
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:TrianglePointMarker Width="15" Height="15" Fill="#00F"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+                <s:XyScatterRenderableSeries>
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:InvertedTrianglePointMarker Width="15" Height="15" Fill="#F00"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+                <s:XyScatterRenderableSeries>
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:SquarePointMarker Width="10" Height="10" Fill="#FF0"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+                <s:XyScatterRenderableSeries>
+                    <s:XyScatterRenderableSeries.PointMarker>
+                        <s:SquarePointMarker Width="10" Height="10" Fill="#FF0"/>
+                    </s:XyScatterRenderableSeries.PointMarker>
+                </s:XyScatterRenderableSeries>
+                <s:FastLineRenderableSeries Stroke="Red"/>
+                <s:FastLineRenderableSeries Stroke="White"/>
+                <s:FastLineRenderableSeries Stroke="Yellow"/>
+                <s:FastLineRenderableSeries Stroke="Green"/>
+            </s:SciStockChart.RenderableSeries>
+            <!--  Override any properties of the built-in CategoryDateTimeAxis  -->
+            <s:SciStockChart.XAxisStyle>
+                <Style TargetType="s:CategoryDateTimeAxis">
+                    <Setter Property="BarTimeFrame" Value="{Binding BarTimeFrame, Mode=OneWay}" />
+                    <Setter Property="DrawMinorGridLines" Value="False" />
+                    <Setter Property="DrawMajorBands" Value="True" />
+                    <!-- <Setter Property="VisibleRange" Value="{Binding XVisibleRange, Mode=TwoWay}" />-->
+                    <Setter Property="GrowBy" Value="0, 0.1" />
+                </Style>
+            </s:SciStockChart.XAxisStyle>
+
+            <!--  Override any properties of the built-in NumericAxis  -->
+            <s:SciStockChart.YAxisStyle>
+                <Style TargetType="s:NumericAxis">
+                    <Setter Property="AutoRange" Value="Always" />
+                </Style>
+            </s:SciStockChart.YAxisStyle>
+            <s:SciChartSurface.Annotations>
+                <s:HorizontalLineAnnotation Name="HLineBid" Stroke="Gray" StrokeThickness="1" Y1="0" />
+                <s:HorizontalLineAnnotation Name="HLineAsk" Stroke="Brown" StrokeThickness="1" Y1="0" ShowLabel="True" />
+            </s:SciChartSurface.Annotations>
+        </s:SciStockChart>
+
+        <!--  This grid is used to space Overview Control so its width matches parent chart XAxis  -->
+        <Grid Grid.Row="1"
+              Grid.Column="1"
+              Height="32">
+
+
+            <!--  Define the Overview control, binding to XVisibleRange, which is shared between this and the SciStockChart control  -->
+            <s:SciChartOverview Grid.Column="1"
+                                ParentSurface="{Binding Source={x:Reference Name=PriceChart},
+                                                        Mode=OneWay}"
+                                SelectedRange="{Binding XVisibleRange,
+                                                        Mode=TwoWay}"
+                                s:ThemeManager.Theme="{Binding ElementName=ThemeCombo,
+                                                               Path=SelectedItem}" IsEnabled="True" />
+
+        </Grid>
+    </Grid>
+</UserControl>
