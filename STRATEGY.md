@@ -16,7 +16,7 @@ _plot_indicator(id, value)
 ## *_plot_pnt*
 
 ```C#
-_plot_pnt(key, value, comment)
+_plot_pnt(key, value, comment, timeframe)
 ```
 
 - Plot point to chart
@@ -26,6 +26,7 @@ _plot_pnt(key, value, comment)
 |key|indexing key of point|ex. "A2"|
 |value|price to plot to chart|(any number)|
 |comment|description about pnt|(any note string, empty string is also possible)|
+|timeframe|to avoid multiple plotting|(valid timeframe, ex. M1, M4, ...)|
 
 ## *_lots*
 
