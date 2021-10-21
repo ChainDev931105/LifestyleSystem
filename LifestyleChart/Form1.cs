@@ -262,6 +262,10 @@ namespace LifestyleChart
                             if (pnt.sComment == "BUY" || pnt.sComment == "SELL_CLOSE") ucSciStockChart1.update_pnt(0, dt, pnt.dValue);
                             else if (pnt.sComment == "SELL" || pnt.sComment == "BUY_CLOSE") ucSciStockChart1.update_pnt(1, dt, pnt.dValue);
                         }
+                        else
+                        {
+                            ucSciStockChart1.AddAnnotation(m_activePntKey.Item2, dt, pnt.dValue, pnt.sComment);
+                        }
                     }
                 }
                 catch { }

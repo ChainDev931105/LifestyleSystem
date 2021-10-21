@@ -28,6 +28,15 @@ namespace LifestyleTrader
             m_oLock = new object();
         }
 
+        ~Form1()
+        {
+            try
+            {
+                Manager.Stop();
+            }
+            catch { }
+        }
+
         private void btn_start_Click(object sender, EventArgs e)
         {
             btn_start.Enabled = false;

@@ -4,6 +4,7 @@ using System.Windows.Media;
 using SciChart.Charting.Model.DataSeries;
 using SciChart.Examples.ExternalDependencies.Common;
 using SciChart.Examples.ExternalDependencies.Data;
+using SciChart.Charting.Visuals.Annotations;
 using SciChart.Charting.Visuals;
 using System.Collections.Generic;
 
@@ -280,5 +281,27 @@ namespace WpfSciStockChart
             }
             return -1;
         }
+
+        public void AddAnnotation(string command, DateTime dtTime, double dPrice, string sText = "")
+        {
+            AnnotationBase annotation;
+            if (sText != null && sText != "")
+            {
+                annotation = new TextAnnotation();
+
+                annotation.X1 = dtTime;
+                annotation.Y1 = dPrice;
+                ((TextAnnotation)annotation).Text = sText;
+
+                if (lastAnnotation == null || lastAnnotation.X1 != annotation.X1 || lastAnnotation.Y1 != annotation.Y1
+                    || lastAnnotation.Text != sText)
+                {
+                    lastAnnotation = ((TextAnnotation)annotation);
+                    PriceChart.Annotations.Add(annotation);
+                }
+            }
+        }
+
+        TextAnnotation lastAnnotation = null;
     }
 }

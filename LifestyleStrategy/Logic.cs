@@ -10,7 +10,7 @@ namespace LifestyleStrategy
     {
         public const int INDICATOR_COUNT = 4;
         public Action<int, double> _plot_indicator = new Action<int, double>((x, y) => { });
-        public Action<string, double, string> _plot_pnt = new Action<string, double, string>((x, y, z) => { });
+        public Action<string, double, string, string> _plot_pnt = new Action<string, double, string, string>((x, y, z, t) => { });
         public Func<double> _lots = new Func<double>(() => { return 0; });
         public Func<DateTime> _time = new Func<DateTime>(() => { return new DateTime(); });
         public Action<double, string> _order = new Action<double, string>((x, y) => { });

@@ -394,7 +394,7 @@ namespace LifestyleTrader
 
         void logic_init()
         {
-            m_logic = new Logic();
+            m_logic = new Logic0();
             m_logic._plot_indicator = _plot_indicator;
             m_logic._plot_pnt = _plot_pnt;
             m_logic._lots = _lots;
@@ -414,14 +414,19 @@ namespace LifestyleTrader
             string sKey = nID.ToString();
             if (m_dicIndicator.ContainsKey(sKey)) m_dicIndicator[sKey].UpdateValue(dValue, m_TFEngine.m_time);
         }
-        void _plot_pnt(string sKey, double dValue, string sComment)
+        void _plot_pnt(string sKey, double dValue, string sComment, string sTF)
         {
+            long time = m_TFEngine.m_time;
+            if (sTF.Length > 0)
+            {
+                time = m_TFEngine.GetTimeFrame(sTF).GetStartMoment(time);
+            }
             Manager.g_chart.Send(new List<string>()
             {
                 m_sStrategyID,
                 "pnt",
                 sKey,
-                m_TFEngine.m_time.ToString(),
+                time.ToString(),
                 dValue.ToString(),
                 sComment
             }, true);
