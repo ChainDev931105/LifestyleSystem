@@ -172,5 +172,10 @@ namespace LifestyleTrader
             listView_eval = this.listView_eval;
             listView_his = this.listView_his;
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
     }
 }

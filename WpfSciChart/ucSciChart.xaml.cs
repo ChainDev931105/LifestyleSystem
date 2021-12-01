@@ -293,8 +293,7 @@ namespace WpfSciStockChart
                 annotation.Y1 = dPrice;
                 ((TextAnnotation)annotation).Text = sText;
 
-                if (lastAnnotation == null || lastAnnotation.X1 != annotation.X1 || lastAnnotation.Y1 != annotation.Y1
-                    || lastAnnotation.Text != sText)
+                if (lastAnnotation == null || lastAnnotation.X1 != annotation.X1 || lastAnnotation.Text != sText)
                 {
                     lastAnnotation = ((TextAnnotation)annotation);
                     PriceChart.Annotations.Add(annotation);

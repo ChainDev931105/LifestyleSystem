@@ -85,7 +85,6 @@ namespace LifestyleManager
             }));
         }
 
-
         private void btn_downRate_Click(object sender, EventArgs e)
         {
             m_nDownedRate = 0;
@@ -208,6 +207,11 @@ namespace LifestyleManager
                 cmb_symbol.Items.Add(sSymbol);
             }
             PutLog("Inited");
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
     }
 }

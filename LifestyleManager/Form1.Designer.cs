@@ -187,6 +187,7 @@
             this.col_h,
             this.col_l,
             this.col_c});
+            this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(12, 158);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(445, 329);
@@ -242,6 +243,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

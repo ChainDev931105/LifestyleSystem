@@ -195,6 +195,7 @@
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "LifestyleChart";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

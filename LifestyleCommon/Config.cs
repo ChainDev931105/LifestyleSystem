@@ -126,6 +126,10 @@ namespace LifestyleCommon
             }
             return 0;
         }
+        public long GetPrvStartMoment(long time)
+        {
+            return GetStartMoment(GetStartMoment(time) - 1);
+        }
     }
 
     public enum TF_TYPE

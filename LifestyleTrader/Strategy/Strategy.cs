@@ -17,6 +17,7 @@ namespace LifestyleTrader
         private Dictionary<Tuple<string, Pattern>, PersistentOhlc> m_dicPersistentOHLC = new Dictionary<Tuple<string, Pattern>, PersistentOhlc>();
         private double m_dDefaultRate = 0;
         private Dictionary<Tuple<string, string>, bool> m_dicStates = new Dictionary<Tuple<string, string>, bool>();
+        private Dictionary<Tuple<TimeFrame, long>, Dictionary<Tuple<string, string>, bool>> m_hisStates = new Dictionary<Tuple<TimeFrame, long>, Dictionary<Tuple<string, string>, bool>>();
         private List<ORDER_COMMAND> m_lstSignal = new List<ORDER_COMMAND>();
         private JArray m_jInd = null;
         private double ex_dLots = 1.0;
@@ -80,6 +81,7 @@ namespace LifestyleTrader
             calcPattern();
             DEFAULT_RATE = m_TFEngine.Ask();
             logic_ontick();
+            backupState();
         }
 
         private void calcPattern()
@@ -151,12 +153,36 @@ namespace LifestyleTrader
             if (pattern == Pattern.D2)
                 return check(sTF, Pattern.B1, nShift + 1) && check(sTF, Pattern.Down, nShift)
                     && check(sTF, Pattern.InBody, nShift);
+            if (pattern == Pattern.D3)
+                return check(sTF, Pattern.C1, nShift + 1) && check(sTF, Pattern.Up, nShift)
+            && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+            if (pattern == Pattern.D4)
+                return check(sTF, Pattern.B1, nShift + 1) && check(sTF, Pattern.Up, nShift)
+             && rate(sTF, 'C', nShift) > rate(sTF, 'H', nShift + 1);
+            if (pattern == Pattern.D5)
+                return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Down, nShift)
+             && check(sTF, Pattern.InRange, nShift);
+            if (pattern == Pattern.D6)
+                return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Up, nShift)
+             && rate(sTF, 'C', nShift) > rate(sTF, 'H', nShift + 1);
             if (pattern == Pattern.E1)
                 return check(sTF, Pattern.B2, nShift + 1) && check(sTF, Pattern.Down, nShift)
                     && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
             if (pattern == Pattern.E2)
                 return check(sTF, Pattern.B2, nShift + 1) && check(sTF, Pattern.Up, nShift)
                     && check(sTF, Pattern.InBody, nShift);
+            if (pattern == Pattern.E3)
+                return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Down, nShift)
+             && check(sTF, Pattern.InRange, nShift);
+            if (pattern == Pattern.E4)
+                return check(sTF, Pattern.B2, nShift + 1) && check(sTF, Pattern.Down, nShift)
+             && rate(sTF, 'C', nShift) < rate(sTF, 'L', nShift + 1);
+            if (pattern == Pattern.E5)
+                return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Up, nShift)
+             && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+            if (pattern == Pattern.E6)
+                return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Down, nShift)
+             && rate(sTF, 'C', nShift) < rate(sTF, 'L', nShift + 1);
             if (pattern == Pattern.F1)
                 return check(sTF, Pattern.A1, nShift + 1) && check(sTF, Pattern.Down, nShift)
                     && !check(sTF, Pattern.InRange, nShift);
@@ -294,8 +320,13 @@ namespace LifestyleTrader
 
         private void initState()
         {
-            m_dicStates.Clear();
+            m_dicStates = new Dictionary<Tuple<string, string>, bool>();
             m_lstSignal.Clear();
+        }
+
+        private void backupState()
+        {// can't implement because which timeframe should I do...
+            
         }
 
         private void setState(string sKey, string sValue)
@@ -419,7 +450,7 @@ namespace LifestyleTrader
             long time = m_TFEngine.m_time;
             if (sTF.Length > 0)
             {
-                time = m_TFEngine.GetTimeFrame(sTF).GetStartMoment(time);
+                time = m_TFEngine.GetTimeFrame(sTF).GetPrvStartMoment(time);
             }
             Manager.g_chart.Send(new List<string>()
             {
@@ -440,7 +471,7 @@ namespace LifestyleTrader
             requestOrder(m_symbol, cmd, ref dLots, ref dPrice);
         }
         double _value(string a, string b, string c, string d) { return pastRate(a, b, c.Length > 0 ? c[0] : ' ', d); }
-        bool _check(string sTimeFrame, string sPattern) { return check(sTimeFrame, sPattern); }
+        bool _check(string sTimeFrame, string sPattern, string sShift) { return check(sTimeFrame, sPattern, int.Parse(sShift)) || (sShift == "0" && checkState(sTimeFrame, sPattern)); }
         void _set(string sTimeFrame, string sPattern) { setState(sTimeFrame, sPattern); }
     }
 }

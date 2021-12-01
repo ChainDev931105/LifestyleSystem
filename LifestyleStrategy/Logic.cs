@@ -15,7 +15,7 @@ namespace LifestyleStrategy
         public Func<DateTime> _time = new Func<DateTime>(() => { return new DateTime(); });
         public Action<double, string> _order = new Action<double, string>((x, y) => { });
         public Func<string, string, string, string, double> _value = new Func<string, string, string, string, double>((x, y, z, t) => { return 0.0; });
-        public Func<string, string, bool> _check = new Func<string, string, bool>((x, y) => { return false; });
+        public Func<string, string, string, bool> _check = new Func<string, string, string, bool>((x, y, z) => { return false; });
         public Action<string, string> _set = new Action<string, string>((x, y) => { });
 
         public virtual void OnTick()

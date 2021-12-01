@@ -315,6 +315,7 @@
             this.col_value});
             this.listView_eval.GridLines = true;
             this.listView_eval.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listView_eval.HideSelection = false;
             this.listView_eval.Location = new System.Drawing.Point(464, 25);
             this.listView_eval.Name = "listView_eval";
             this.listView_eval.Size = new System.Drawing.Size(164, 169);
@@ -396,6 +397,7 @@
             this.Controls.Add(this.btn_start);
             this.Name = "Form1";
             this.Text = "LifestyleTrader";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.panel_eval.ResumeLayout(false);
             this.panel_eval.PerformLayout();
             this.ResumeLayout(false);
