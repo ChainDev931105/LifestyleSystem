@@ -4,18 +4,17 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using IBApi;
-using IBTradingSystem.Broker.IB.messages;
+using IBSampleApp.messages;
 
-namespace IBTradingSystem.Broker.IB
+namespace IBSampleApp
 {
     class IBClient : EWrapper
     {
-
         public Task<Contract> ResolveContractAsync(int conId, string refExch)
         {
             var reqId = new Random(DateTime.Now.Millisecond).Next();
             var resolveResult = new TaskCompletionSource<Contract>();
-            var resolveContract_Error = new Action<int, int, string, Exception>((id, code, msg, ex) =>
+            var resolveContract_Error = new Action<int, int, string, string, Exception>((id, code, msg, advancedOrderRejectJson, ex) =>
             {
                 if (reqId != id)
                     return;
@@ -59,7 +58,7 @@ namespace IBTradingSystem.Broker.IB
             var reqId = new Random(DateTime.Now.Millisecond).Next();
             var res = new TaskCompletionSource<Contract[]>();
             var contractList = new List<Contract>();
-            var resolveContract_Error = new Action<int, int, string, Exception>((id, code, msg, ex) =>
+            var resolveContract_Error = new Action<int, int, string, string, Exception>((id, code, msg, advancedOrderRejectJson, ex) =>
             {
                 if (reqId != id)
                     return;
@@ -114,14 +113,14 @@ namespace IBTradingSystem.Broker.IB
 
         public int NextOrderId { get; set; }
 
-        public event Action<int, int, string, Exception> Error;
+        public event Action<int, int, string, string, Exception> Error;
 
         void EWrapper.error(Exception e)
         {
             var tmp = Error;
 
             if (tmp != null)
-                sc.Post(t => tmp(0, 0, null, e), null);
+                sc.Post(t => tmp(0, 0, null, null, e), null);
         }
 
         void EWrapper.error(string str)
@@ -129,15 +128,15 @@ namespace IBTradingSystem.Broker.IB
             var tmp = Error;
 
             if (tmp != null)
-                sc.Post(t => tmp(0, 0, str, null), null);
+                sc.Post(t => tmp(0, 0, str, null, null), null);
         }
 
-        void EWrapper.error(int id, int errorCode, string errorMsg)
+        void EWrapper.error(int id, int errorCode, string errorMsg, string advancedOrderRejectJson)
         {
             var tmp = Error;
 
             if (tmp != null)
-                sc.Post(t => tmp(id, errorCode, errorMsg, null), null);
+                sc.Post(t => tmp(id, errorCode, errorMsg, advancedOrderRejectJson, null), null);
         }
 
         public event Action ConnectionClosed;
@@ -172,7 +171,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<TickSizeMessage> TickSize;
 
-        void EWrapper.tickSize(int tickerId, int field, int size)
+        void EWrapper.tickSize(int tickerId, int field, decimal size)
         {
             var tmp = TickSize;
 
@@ -190,14 +189,14 @@ namespace IBTradingSystem.Broker.IB
                 sc.Post(t => tmp(tickerId, tickType, value), null);
         }
 
-        public event Action<int, int, double> TickGeneric;
+        public event Action<TickGenericMessage> TickGeneric;
 
         void EWrapper.tickGeneric(int tickerId, int field, double value)
         {
             var tmp = TickGeneric;
 
             if (tmp != null)
-                sc.Post(t => tmp(tickerId, field, value), null);
+                sc.Post(t => tmp(new TickGenericMessage(tickerId, field, value)), null);
         }
 
         public event Action<int, int, double, string, double, int, string, double, double> TickEFP;
@@ -254,12 +253,12 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<TickOptionMessage> TickOptionCommunication;
 
-        void EWrapper.tickOptionComputation(int tickerId, int field, double impliedVolatility, double delta, double optPrice, double pvDividend, double gamma, double vega, double theta, double undPrice)
+        void EWrapper.tickOptionComputation(int tickerId, int field, int tickAttrib, double impliedVolatility, double delta, double optPrice, double pvDividend, double gamma, double vega, double theta, double undPrice)
         {
-            //var tmp = TickOptionCommunication;
+            var tmp = TickOptionCommunication;
 
-            //if (tmp != null)
-            //    sc.Post((t) => tmp(new TickOptionMessage(tickerId, field, impliedVolatility, delta, optPrice, pvDividend, gamma, vega, theta, undPrice)), null);
+            if (tmp != null)
+                sc.Post(t => tmp(new TickOptionMessage(tickerId, field, tickAttrib, impliedVolatility, delta, optPrice, pvDividend, gamma, vega, theta, undPrice)), null);
         }
 
         public event Action<AccountSummaryMessage> AccountSummary;
@@ -294,7 +293,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<UpdatePortfolioMessage> UpdatePortfolio;
 
-        void EWrapper.updatePortfolio(Contract contract, double position, double marketPrice, double marketValue, double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
+        void EWrapper.updatePortfolio(Contract contract, decimal position, double marketPrice, double marketValue, double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
         {
             var tmp = UpdatePortfolio;
 
@@ -324,7 +323,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<OrderStatusMessage> OrderStatus;
 
-        void EWrapper.orderStatus(int orderId, string status, double filled, double remaining, double avgFillPrice, int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)
+        void EWrapper.orderStatus(int orderId, string status, decimal filled, decimal remaining, double avgFillPrice, int permId, int parentId, double lastFillPrice, int clientId, string whyHeld, double mktCapPrice)
         {
             var tmp = OrderStatus;
 
@@ -444,7 +443,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<DeepBookMessage> UpdateMktDepth;
 
-        void EWrapper.updateMktDepth(int tickerId, int position, int operation, int side, double price, int size)
+        void EWrapper.updateMktDepth(int tickerId, int position, int operation, int side, double price, decimal size)
         {
             var tmp = UpdateMktDepth;
 
@@ -454,7 +453,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<DeepBookMessage> UpdateMktDepthL2;
 
-        void EWrapper.updateMktDepthL2(int tickerId, int position, string marketMaker, int operation, int side, double price, int size, bool isSmartDepth)
+        void EWrapper.updateMktDepthL2(int tickerId, int position, string marketMaker, int operation, int side, double price, decimal size, bool isSmartDepth)
         {
             var tmp = UpdateMktDepthL2;
 
@@ -474,7 +473,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<PositionMessage> Position;
 
-        void EWrapper.position(string account, Contract contract, double pos, double avgCost)
+        void EWrapper.position(string account, Contract contract, decimal pos, double avgCost)
         {
             var tmp = Position;
 
@@ -494,7 +493,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<RealTimeBarMessage> RealtimeBar;
 
-        void EWrapper.realtimeBar(int reqId, long time, double open, double high, double low, double close, long volume, double WAP, int count)
+        void EWrapper.realtimeBar(int reqId, long time, double open, double high, double low, double close, decimal volume, decimal WAP, int count)
         {
             var tmp = RealtimeBar;
 
@@ -620,7 +619,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<PositionMultiMessage> PositionMulti;
 
-        void EWrapper.positionMulti(int reqId, string account, string modelCode, Contract contract, double pos, double avgCost)
+        void EWrapper.positionMulti(int reqId, string account, string modelCode, Contract contract, decimal pos, double avgCost)
         {
             var tmp = PositionMulti;
 
@@ -861,7 +860,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<PnLSingleMessage> pnlSingle;
 
-        void EWrapper.pnlSingle(int reqId, int pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
+        void EWrapper.pnlSingle(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
         {
             var tmp = pnlSingle;
 
@@ -903,7 +902,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<TickByTickAllLastMessage> tickByTickAllLast;
 
-        void EWrapper.tickByTickAllLast(int reqId, int tickType, long time, double price, int size, TickAttribLast tickAttribLast, string exchange, string specialConditions)
+        void EWrapper.tickByTickAllLast(int reqId, int tickType, long time, double price, decimal size, TickAttribLast tickAttribLast, string exchange, string specialConditions)
         {
             var tmp = tickByTickAllLast;
 
@@ -913,7 +912,7 @@ namespace IBTradingSystem.Broker.IB
 
         public event Action<TickByTickBidAskMessage> tickByTickBidAsk;
 
-        void EWrapper.tickByTickBidAsk(int reqId, long time, double bidPrice, double askPrice, int bidSize, int askSize, TickAttribBidAsk tickAttribBidAsk)
+        void EWrapper.tickByTickBidAsk(int reqId, long time, double bidPrice, double askPrice, decimal bidSize, decimal askSize, TickAttribBidAsk tickAttribBidAsk)
         {
             var tmp = tickByTickBidAsk;
 
@@ -959,6 +958,54 @@ namespace IBTradingSystem.Broker.IB
 
             if (tmp != null)
                 sc.Post(t => tmp(), null);
+        }
+
+        public event Action<int, string> ReplaceFAEnd;
+
+        void EWrapper.replaceFAEnd(int reqId, string text)
+        {
+            var tmp = ReplaceFAEnd;
+
+            if (tmp != null)
+                sc.Post(t => tmp(reqId, text), null);
+        }
+
+        public event Action<int, string> WshMetaData;
+
+        public void wshMetaData(int reqId, string dataJson)
+        {
+            var tmp = WshMetaData;
+
+            if (tmp != null)
+                sc.Post(t => tmp(reqId, dataJson), null);
+        }
+
+        public event Action<int, string> WshEventData;
+
+        public void wshEventData(int reqId, string dataJson)
+        {
+            var tmp = WshEventData;
+
+            if (tmp != null)
+                sc.Post(t => tmp(reqId, dataJson), null);
+        }
+
+        public event Action<HistoricalScheduleMessage> HistoricalSchedule;
+
+        public void historicalSchedule(int reqId, string startDateTime, string endDateTime, string timeZone, HistoricalSession[] sessions)
+        {
+            var tmp = HistoricalSchedule;
+
+            if (tmp != null)
+                sc.Post(t => tmp(new HistoricalScheduleMessage(reqId, startDateTime, endDateTime, timeZone, sessions)), null);
+        }
+
+        public event Action<string> UserInfo;
+        void EWrapper.userInfo(int reqId, string whiteBrandingId)
+        {
+            var tmp = UserInfo;
+            if (tmp != null)
+                sc.Post(t => tmp(whiteBrandingId), null);
         }
     }
 }

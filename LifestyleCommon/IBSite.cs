@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 using IBApi;
-using IBTradingSystem.Broker.IB.messages;
-using IBTradingSystem.Broker.IB;
+using IBSampleApp.messages;
+using IBSampleApp;
 
 namespace LifestyleCommon
 {
@@ -89,7 +89,7 @@ namespace LifestyleCommon
             m_ibClient.ClientSocket.reqHistoricalData(
                 reqId, 
                 getContract(symbol),
-                dtStart.AddHours(2).ToString("yyyyMMdd HH:mm:ss") + " GMT", 
+                dtStart.AddHours(2).ToString("yyyyMMdd-HH:mm:ss"), 
                 "7200 S",
                 "1 min", 
                 "BID_ASK", 
@@ -108,7 +108,7 @@ namespace LifestyleCommon
             order.Action = (cmd == ORDER_COMMAND.BUY || cmd == ORDER_COMMAND.SELLCLOSE) ? "BUY" : "SELL";
 
             order.OrderType = "MKT";
-            order.TotalQuantity = Math.Round(dLots, 0);
+            order.TotalQuantity = 0;
             m_ibClient.ClientSocket.placeOrder(nOrderID, getContract(symbol), order);
 
             double dTotLots = 0;
@@ -124,8 +124,8 @@ namespace LifestyleCommon
                     {
                         if (orderStatusMessage.Status == "Filled")
                         {
-                            dTotLots += orderStatusMessage.Filled;
-                            dTotPrice += orderStatusMessage.Filled * orderStatusMessage.AvgFillPrice;
+                            dTotLots += Decimal.ToDouble(orderStatusMessage.Filled);
+                            dTotPrice += Decimal.ToDouble(orderStatusMessage.Filled) * orderStatusMessage.AvgFillPrice;
                         }
                     }
                     m_dicOrderResponse[nOrderID].Clear();

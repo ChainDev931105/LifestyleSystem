@@ -1,7 +1,9 @@
-﻿using System;
+﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+ * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
+using System;
 using System.Collections.Generic;
 
-namespace IBTradingSystem.Brokerage.IB.types
+namespace IBSampleApp.types
 {
     class AccountAlias
     {
@@ -17,8 +19,8 @@ namespace IBTradingSystem.Brokerage.IB.types
                  "\t<AccountAlias>"
                 + "\t\t<Account>" + Account + "</Account>"
                 + "\t\t\t<Alias>" + Alias + "</Alias>"
-                + "\t</AccountAlias>";
-
+                + "\t</AccountAlias>";          
+            
             return xml;
         }
 
@@ -40,16 +42,16 @@ namespace IBTradingSystem.Brokerage.IB.types
         {
             string xml =
                  "  <Group>"
-                + "      <name>" + Name + "</name>"
-                + "      <ListOfAccts varName=\"list\">";
-            foreach (string account in Accounts)
-                xml += "         <String>" + account + "</String>";
+                +"      <name>"+Name+"</name>"
+                +"      <ListOfAccts varName=\"list\">";
+            foreach(string account in Accounts)
+                xml+="         <String>"+account+"</String>";
 
             xml +=
                  "      </ListOfAccts>"
-                + "      <defaultMethod>" + DefaultMethod + "</defaultMethod>"
-                + "  </Group>";
-
+                +"      <defaultMethod>"+DefaultMethod+"</defaultMethod>"
+                +"  </Group>";
+            
             return xml;
         }
 
@@ -86,26 +88,26 @@ namespace IBTradingSystem.Brokerage.IB.types
 
         public string ToXmlString()
         {
-            string xml =
+            string xml = 
                  "  <AllocationProfile>"
-                + "      <name>" + Name + "</name>"
-                + "      <type>" + Type + "</type>"
-                + "      <ListOfAllocations varName=\"listOfAllocations\">";
+                +"      <name>"+Name+"</name>"
+                +"      <type>"+Type+"</type>"
+                +"      <ListOfAllocations varName=\"listOfAllocations\">";
 
             foreach (Allocation profileAllocation in Allocations)
                 xml += profileAllocation.ToXmlString();
 
             xml +=
                  "      </ListOfAllocations>"
-                + "  </AllocationProfile>";
+                +"  </AllocationProfile>";
 
             return xml;
         }
 
         public string AllocationsToString()
         {
-            string str = Allocations[0].Account + "/" + Allocations[0].Amount;
-            for (int i = 1; i < Allocations.Count; i++)
+            string str = Allocations[0].Account+"/"+Allocations[0].Amount;
+            for(int i=1; i<Allocations.Count; i++)
             {
                 str += "," + Allocations[i].Account + "/" + Allocations[i].Amount;
             }
@@ -124,10 +126,10 @@ namespace IBTradingSystem.Brokerage.IB.types
                 }
                 return true;
             }
-            catch (Exception)
+            catch(Exception)
             {
                 return false;
-            }
+            }                
         }
 
         public string Name { get; set; }
@@ -147,12 +149,12 @@ namespace IBTradingSystem.Brokerage.IB.types
 
         public string ToXmlString()
         {
-            string xml =
+            string xml = 
                  "          <Allocation>"
-                + "              <acct>" + Account + "</acct>"
-                + "              <amount>" + Amount + "</amount>"
-                + "              <posEff>O</posEff>"
-                + "          </Allocation>";
+                +"              <acct>"+Account+"</acct>"
+                +"              <amount>"+Amount+"</amount>"
+                +"              <posEff>O</posEff>"
+                +"          </Allocation>";
 
             return xml;
         }

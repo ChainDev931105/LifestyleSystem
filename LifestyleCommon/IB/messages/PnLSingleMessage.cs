@@ -1,18 +1,18 @@
-﻿/* IBTradingSystem. IB Client.
- * Get all data from IB gateway.. */
+﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+ * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-namespace IBTradingSystem.Broker.IB.messages
+namespace IBSampleApp.messages
 {
     class PnLSingleMessage
     {
         public int ReqId { get; private set; }
-        public int Pos { get; private set; }
+        public decimal Pos { get; private set; }
         public double DailyPnL { get; private set; }
         public double Value { get; private set; }
         public double UnrealizedPnL { get; private set; }
         public double RealizedPnL { get; private set; }
 
-        public PnLSingleMessage(int reqId, int pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
+        public PnLSingleMessage(int reqId, decimal pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
         {
             ReqId = reqId;
             Pos = pos;

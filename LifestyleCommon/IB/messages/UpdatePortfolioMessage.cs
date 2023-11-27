@@ -1,13 +1,13 @@
-﻿/* IBTradingSystem. IB Client.
- * Get all data from IB gateway.. */
+﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+ * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
 using IBApi;
 
-namespace IBTradingSystem.Broker.IB.messages
+namespace IBSampleApp.messages
 {
     class UpdatePortfolioMessage
     {
-        public UpdatePortfolioMessage(Contract contract, double position, double marketPrice, double marketValue, double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
+        public UpdatePortfolioMessage(Contract contract, decimal position, double marketPrice, double marketValue, double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
         {
             Contract = contract;
             Position = position;
@@ -21,7 +21,7 @@ namespace IBTradingSystem.Broker.IB.messages
 
         public Contract Contract { get; set; }
 
-        public double Position { get; set; }
+        public decimal Position { get; set; }
 
         public double MarketPrice { get; set; }
 

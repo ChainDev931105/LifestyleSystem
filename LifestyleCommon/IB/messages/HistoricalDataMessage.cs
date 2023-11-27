@@ -1,7 +1,7 @@
-﻿/* IBTradingSystem. IB Client.
- * Get all data from IB gateway.. */
+﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+ * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-namespace IBTradingSystem.Broker.IB.messages
+namespace IBSampleApp.messages
 {
     class HistoricalDataMessage
     {
@@ -11,9 +11,9 @@ namespace IBTradingSystem.Broker.IB.messages
         protected double high;
         protected double low;
         protected double close;
-        protected long volume;
+        protected decimal volume;
         protected int count;
-        protected double wap;
+        protected decimal wap;
         protected bool hasGaps;
 
         public int RequestId
@@ -53,7 +53,7 @@ namespace IBTradingSystem.Broker.IB.messages
             set { close = value; }
         }
         
-        public long Volume
+        public decimal Volume
         {
             get { return volume; }
             set { volume = value; }
@@ -65,7 +65,7 @@ namespace IBTradingSystem.Broker.IB.messages
             set { count = value; }
         }
 
-        public double Wap
+        public decimal Wap
         {
             get { return wap; }
             set { wap = value; }

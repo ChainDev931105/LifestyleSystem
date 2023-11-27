@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LifestyleCommon</RootNamespace>
     <AssemblyName>LifestyleCommon</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -37,7 +37,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CSharpAPI">
+    <Reference Include="CSharpAPI, Version=9.76.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\CSharpAPI.dll</HintPath>
     </Reference>
     <Reference Include="EasyNetQ, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -130,6 +131,7 @@
     <Compile Include="IB\messages\HistoricalDataMessage.cs" />
     <Compile Include="IB\messages\HistoricalNewsEndMessage.cs" />
     <Compile Include="IB\messages\HistoricalNewsMessage.cs" />
+    <Compile Include="IB\messages\HistoricalScheduleMessage.cs" />
     <Compile Include="IB\messages\HistoricalTickBidAskEndMessage.cs" />
     <Compile Include="IB\messages\HistoricalTickBidAskMessage.cs" />
     <Compile Include="IB\messages\HistoricalTickEndMessage.cs" />
@@ -163,6 +165,7 @@
     <Compile Include="IB\messages\TickByTickAllLastMessage.cs" />
     <Compile Include="IB\messages\TickByTickBidAskMessage.cs" />
     <Compile Include="IB\messages\TickByTickMidPointMessage.cs" />
+    <Compile Include="IB\messages\TickGenericMessage.cs" />
     <Compile Include="IB\messages\TickNewsMessage.cs" />
     <Compile Include="IB\messages\TickOptionMessage.cs" />
     <Compile Include="IB\messages\TickPriceMessage.cs" />

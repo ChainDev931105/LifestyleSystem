@@ -1,11 +1,11 @@
-﻿/* IBTradingSystem. IB Client.
- * Get all data from IB gateway.. */
+﻿/* Copyright (C) 2019 Interactive Brokers LLC. All rights reserved. This code is subject to the terms
+ * and conditions of the IB API Non-Commercial License or the IB API Commercial License, as applicable. */
 
-namespace IBTradingSystem.Broker.IB.messages
+namespace IBSampleApp.messages
 {
     class DeepBookMessage
     {
-        public DeepBookMessage(int tickerId, int position, int operation, int side, double price, int size, string marketMaker, bool isSmartDepth)
+        public DeepBookMessage(int tickerId, int position, int operation, int side, double price, decimal size, string marketMaker, bool isSmartDepth)
         {
             RequestId = tickerId;
             Position = position;
@@ -27,7 +27,7 @@ namespace IBTradingSystem.Broker.IB.messages
 
         public double Price { get; set; }
 
-        public int Size { get; set; }
+        public decimal Size { get; set; }
 
         public string MarketMaker { get; set; }
 
