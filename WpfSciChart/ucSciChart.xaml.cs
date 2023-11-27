@@ -267,6 +267,15 @@ namespace WpfSciStockChart
             // for (int i = 0; i < PNT_CNT; i++) pntSeries[i].Clear();
         }
 
+        public void ClearAllPnt()
+        {
+            lock (PriceChart)
+            {
+                PriceChart.Annotations.Clear();
+            }
+            for (int i = 0; i < PNT_CNT; i++) pntSeries[i].Clear();
+        }
+
 
         //BY KHS
         private int findNearestIndex(ref DateTime dtTime)
@@ -296,7 +305,10 @@ namespace WpfSciStockChart
                 if (lastAnnotation == null || lastAnnotation.X1 != annotation.X1 || lastAnnotation.Text != sText)
                 {
                     lastAnnotation = ((TextAnnotation)annotation);
-                    PriceChart.Annotations.Add(annotation);
+                    lock (PriceChart)
+                    {
+                        PriceChart.Annotations.Add(annotation);
+                    }
                 }
             }
         }

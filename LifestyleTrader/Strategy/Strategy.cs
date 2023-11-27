@@ -14,9 +14,14 @@ namespace LifestyleTrader
         private string m_sStrategyID = "";
         private TFEngine m_TFEngine = null;
         private Symbol m_symbol = null;
-        private Dictionary<Tuple<string, Pattern>, PersistentOhlc> m_dicPersistentOHLC = new Dictionary<Tuple<string, Pattern>, PersistentOhlc>();
+        private Dictionary<Tuple<string, string>, PersistentOhlc> m_dicPersistentOHLC = new Dictionary<Tuple<string, string>, PersistentOhlc>();
         private double m_dDefaultRate = 0;
         private Dictionary<Tuple<string, string>, bool> m_dicStates = new Dictionary<Tuple<string, string>, bool>();
+        private Dictionary<string, int> m_dicStatesCnt = new Dictionary<string, int>();
+        private Dictionary<Tuple<Ohlc, Tuple<string, string>>, bool> m_dicPersistentStates =
+            new Dictionary<Tuple<Ohlc, Tuple<string, string>>, bool>();
+        private Dictionary<Tuple<Ohlc, string>, int> m_dicPersistentStatesCnt =
+            new Dictionary<Tuple<Ohlc, string>, int>();
         private Dictionary<Tuple<TimeFrame, long>, Dictionary<Tuple<string, string>, bool>> m_hisStates = new Dictionary<Tuple<TimeFrame, long>, Dictionary<Tuple<string, string>, bool>>();
         private List<ORDER_COMMAND> m_lstSignal = new List<ORDER_COMMAND>();
         private JArray m_jInd = null;
@@ -25,6 +30,7 @@ namespace LifestyleTrader
         private Dictionary<string, Indicator> m_dicIndicator = new Dictionary<string, Indicator>();
         private double DEFAULT_RATE = 0;
         private Logic m_logic = null;
+        private string m_sTrend;
 
         public Strategy(Symbol symbol, JObject jStrategy)
         {
@@ -66,7 +72,7 @@ namespace LifestyleTrader
         public void PushTick(Tick tick)
         {
             m_TFEngine.PushTick(tick);
-            
+
             // should set about default_rate
         }
 
@@ -92,7 +98,7 @@ namespace LifestyleTrader
                 {
                     if (check(sTF, pattern))
                     {
-                        var key = Tuple.Create(sTF, pattern);
+                        var key = Tuple.Create(sTF, pattern.ToString());
                         if (!m_dicPersistentOHLC.ContainsKey(key)) m_dicPersistentOHLC[key] = new PersistentOhlc();
                         m_dicPersistentOHLC[key].Append(m_TFEngine.GetOhlc(sTF));
                     }
@@ -149,70 +155,66 @@ namespace LifestyleTrader
                     && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
             if (pattern == Pattern.D1)
                 return check(sTF, Pattern.B1, nShift + 1) && check(sTF, Pattern.Up, nShift)
-                    && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+                    && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift); //checked
             if (pattern == Pattern.D2)
                 return check(sTF, Pattern.B1, nShift + 1) && check(sTF, Pattern.Down, nShift)
-                    && check(sTF, Pattern.InBody, nShift);
+                    && check(sTF, Pattern.InBody, nShift); //checked
             if (pattern == Pattern.D3)
                 return check(sTF, Pattern.C1, nShift + 1) && check(sTF, Pattern.Up, nShift)
-            && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+            && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);  //checked
             if (pattern == Pattern.D4)
                 return check(sTF, Pattern.B1, nShift + 1) && check(sTF, Pattern.Up, nShift)
-             && rate(sTF, 'C', nShift) > rate(sTF, 'H', nShift + 1);
+             && rate(sTF, 'C', nShift) > rate(sTF, 'H', nShift + 1);  //checked
             if (pattern == Pattern.D5)
-                return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Down, nShift)
-             && check(sTF, Pattern.InRange, nShift);
+                return check(sTF, Pattern.C1, nShift + 1) && check(sTF, Pattern.Down, nShift)
+             && check(sTF, Pattern.InRange, nShift);  //checked
             if (pattern == Pattern.D6)
-                return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Up, nShift)
-             && rate(sTF, 'C', nShift) > rate(sTF, 'H', nShift + 1);
+                return check(sTF, Pattern.C1, nShift + 1) && check(sTF, Pattern.Up, nShift)
+             && rate(sTF, 'C', nShift) > rate(sTF, 'H', nShift + 1);  //checked
             if (pattern == Pattern.E1)
                 return check(sTF, Pattern.B2, nShift + 1) && check(sTF, Pattern.Down, nShift)
-                    && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+                    && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift); //checked
             if (pattern == Pattern.E2)
                 return check(sTF, Pattern.B2, nShift + 1) && check(sTF, Pattern.Up, nShift)
-                    && check(sTF, Pattern.InBody, nShift);
+                    && check(sTF, Pattern.InBody, nShift);  //checked
             if (pattern == Pattern.E3)
                 return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Down, nShift)
-             && check(sTF, Pattern.InRange, nShift);
+             && check(sTF, Pattern.InRange, nShift);  //checked
             if (pattern == Pattern.E4)
                 return check(sTF, Pattern.B2, nShift + 1) && check(sTF, Pattern.Down, nShift)
-             && rate(sTF, 'C', nShift) < rate(sTF, 'L', nShift + 1);
+             && rate(sTF, 'C', nShift) < rate(sTF, 'L', nShift + 1);  //checked
             if (pattern == Pattern.E5)
                 return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Up, nShift)
-             && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+             && check(sTF, Pattern.InRange, nShift);  /////check again   
             if (pattern == Pattern.E6)
                 return check(sTF, Pattern.C2, nShift + 1) && check(sTF, Pattern.Down, nShift)
-             && rate(sTF, 'C', nShift) < rate(sTF, 'L', nShift + 1);
+             && rate(sTF, 'C', nShift) < rate(sTF, 'L', nShift + 1);  //checked
             if (pattern == Pattern.F1)
-                return check(sTF, Pattern.A1, nShift + 1) && check(sTF, Pattern.Down, nShift)
-                    && !check(sTF, Pattern.InRange, nShift);
+                return check(sTF, Pattern.A2, nShift + 1) && check(sTF, Pattern.Down, nShift)
+             && rate(sTF, 'C', nShift) > rate(sTF, 'H', nShift + 1); //checked
             if (pattern == Pattern.F2)
                 return check(sTF, Pattern.A1, nShift + 1) && check(sTF, Pattern.Down, nShift)
-                    && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+                    && rate(sTF, 'C', nShift) < rate(sTF, 'L', nShift + 1); //checked 
+
             if (pattern == Pattern.F3)
                 return check(sTF, Pattern.A1, nShift + 1) && check(sTF, Pattern.Up, nShift)
-                    && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+                    && rate(sTF, 'C', nShift) > rate(sTF, 'H', nShift + 1); //checked
             if (pattern == Pattern.F4)
-                return check(sTF, Pattern.A1, nShift + 1) && check(sTF, Pattern.Up, nShift)
-                    && !check(sTF, Pattern.InRange, nShift);
-            if (pattern == Pattern.G1)
                 return check(sTF, Pattern.A2, nShift + 1) && check(sTF, Pattern.Up, nShift)
-                    && !check(sTF, Pattern.InRange, nShift);
-            if (pattern == Pattern.G2)
-                return check(sTF, Pattern.A2, nShift + 1) && check(sTF, Pattern.Up, nShift)
-                    && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+                    && rate(sTF, 'C', nShift) < rate(sTF, 'L', nShift + 1); //checked
+
             if (pattern == Pattern.G3)
-                return check(sTF, Pattern.A2, nShift + 1) && check(sTF, Pattern.Down, nShift)
-                    && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);
+                return check(sTF, Pattern.A1, nShift + 1) && check(sTF, Pattern.Down, nShift)
+                    && !check(sTF, Pattern.InBody, nShift) && check(sTF, Pattern.InRange, nShift);  //checked
             if (pattern == Pattern.H1)
                 return check(sTF, Pattern.A2, nShift + 1) && check(sTF, Pattern.Down, nShift)
-                    && !check(sTF, Pattern.InRange, nShift);
+                    && rate(sTF, 'C', nShift) < rate(sTF, 'L', nShift + 1); //checked
             if (pattern == Pattern.H2)
                 return check(sTF, Pattern.A2, nShift + 1) && check(sTF, Pattern.Down, nShift)
-                    && check(sTF, Pattern.InRange, nShift);
+                    && check(sTF, Pattern.InRange, nShift); //checked
             if (pattern == Pattern.H3)
                 return check(sTF, Pattern.A2, nShift + 1) && check(sTF, Pattern.Up, nShift)
-                    && check(sTF, Pattern.InRange, nShift);
+                    && check(sTF, Pattern.InRange, nShift); //checked
 
             return false;
         }
@@ -321,17 +323,28 @@ namespace LifestyleTrader
         private void initState()
         {
             m_dicStates = new Dictionary<Tuple<string, string>, bool>();
+            m_dicStatesCnt = new Dictionary<string, int>();
             m_lstSignal.Clear();
         }
 
         private void backupState()
         {// can't implement because which timeframe should I do...
-            
+
         }
 
         private void setState(string sKey, string sValue)
         {
             m_dicStates[Tuple.Create(sKey, sValue)] = true;
+            if (!m_dicStatesCnt.ContainsKey(sKey)) m_dicStatesCnt[sKey] = 0;
+            m_dicStatesCnt[sKey]++;
+            if (m_TFEngine.m_dicTF.ContainsKey(sKey) || sKey.StartsWith("Trend"))
+            {
+                Ohlc ohlc = m_TFEngine.GetOhlc(sKey.StartsWith("Trend") ? "M1" : sKey);
+                m_dicPersistentStates[Tuple.Create(ohlc, Tuple.Create(sKey, sValue))] = true;
+                var key = Tuple.Create(ohlc, sKey);
+                if (!m_dicPersistentStatesCnt.ContainsKey(key)) m_dicPersistentStatesCnt[key] = 0;
+                m_dicPersistentStatesCnt[key]++;
+            }
         }
 
         private void setOrder(string sCmd)
@@ -341,21 +354,37 @@ namespace LifestyleTrader
             double dLots = double.Parse(sWords[1]);
         }
 
-        private bool checkState(string sKey, string sValue)
+        private bool checkState(string sKey, string sValue, int nShift = 0)
         {
-            try
+            if (nShift == 0)
             {
-                if (check(sKey, sValue)) return true;
+                try
+                {
+                    if (check(sKey, sValue)) return true;
+                }
+                catch { }
+                if (sValue == "Empty")
+                {
+                    return !m_dicStatesCnt.ContainsKey(sKey);
+                }
+                return m_dicStates.ContainsKey(Tuple.Create(sKey, sValue));
             }
-            catch { }
-            return m_dicStates.ContainsKey(Tuple.Create(sKey, sValue));
+            else
+            {
+                if (sValue == "Empty")
+                {
+                    return !m_dicPersistentStatesCnt.ContainsKey(Tuple.Create(m_TFEngine.GetOhlc(sKey, nShift - 1), sKey));
+                }
+                Ohlc ohlc = m_TFEngine.GetOhlc(sKey.StartsWith("Trend") ? "M1" : sKey, nShift - 1);
+                return m_dicPersistentStates.ContainsKey(Tuple.Create(ohlc, Tuple.Create(sKey, sValue)));
+            }
         }
 
         private double pastRate(string sTF, string sPattern, char c, string sShift)
         {
             if (sTF == "lots")
             {
-                return ex_dLots;
+                return getLots(m_symbol);
             }
             int nShift = sShift.Length < 1 ? 0 : int.Parse(sShift);
             if (sTF.Length == 0) // added at 2021-06-24
@@ -367,10 +396,9 @@ namespace LifestyleTrader
                 catch { }
             }
             if (sPattern.Length < 1) return this.rate(sTF, c, nShift);
-            if (nShift == 0) return DEFAULT_RATE;
             try
             {
-                var key = Tuple.Create(sTF, (Pattern)Enum.Parse(typeof(Pattern), sPattern, true));
+                var key = Tuple.Create(sTF, sPattern);
                 if (!m_dicPersistentOHLC.ContainsKey(key)) return DEFAULT_RATE;
                 if (m_dicPersistentOHLC[key].Count() < nShift) return DEFAULT_RATE;
                 Ohlc rate = m_dicPersistentOHLC[key].GetShift(nShift);
@@ -428,11 +456,13 @@ namespace LifestyleTrader
             m_logic = new Logic0();
             m_logic._plot_indicator = _plot_indicator;
             m_logic._plot_pnt = _plot_pnt;
+            m_logic._plot_pnt_past = _plot_pnt_past;
             m_logic._lots = _lots;
             m_logic._time = _time;
             m_logic._order = _order;
-            m_logic._value = _value;
             m_logic._check = _check;
+            m_logic._value = _value;
+            m_logic._find= _find;
             m_logic._set = _set;
         }
 
@@ -462,6 +492,29 @@ namespace LifestyleTrader
                 sComment
             }, true);
         }
+        void _plot_pnt_past(string sKey, double dValue, string sComment, string sTF, string sShift)
+        {
+            int nShift = 1;
+            int.TryParse(sShift, out nShift);
+            long time = m_TFEngine.m_time;
+            if (sTF.Length > 0)
+            {
+                TimeFrame tf = m_TFEngine.GetTimeFrame(sTF);
+                for (int i = 0; i < nShift; i++)
+                {
+                    time = tf.GetPrvStartMoment(time);
+                }
+            }
+            Manager.g_chart.Send(new List<string>()
+            {
+                m_sStrategyID,
+                "pnt",
+                sKey,
+                time.ToString(),
+                dValue.ToString(),
+                sComment
+            }, true);
+        }
         double _lots() { return pastRate("lots", "", 'c', ""); }
         DateTime _time() { return Global.UnixSecondsToDateTime(m_TFEngine.m_time); }
         void _order(double dLots, string sCmd)
@@ -471,7 +524,40 @@ namespace LifestyleTrader
             requestOrder(m_symbol, cmd, ref dLots, ref dPrice);
         }
         double _value(string a, string b, string c, string d) { return pastRate(a, b, c.Length > 0 ? c[0] : ' ', d); }
-        bool _check(string sTimeFrame, string sPattern, string sShift) { return check(sTimeFrame, sPattern, int.Parse(sShift)) || (sShift == "0" && checkState(sTimeFrame, sPattern)); }
-        void _set(string sTimeFrame, string sPattern) { setState(sTimeFrame, sPattern); }
+        int _find(string sTF, string sPattern, int nShift)
+        {
+            if (sPattern.Length < 1) return nShift;
+            try
+            {
+                var key = Tuple.Create(sTF, sPattern);
+                if (!m_dicPersistentOHLC.ContainsKey(key)) return -1;
+                if (m_dicPersistentOHLC[key].Count() < nShift) return -1;
+                Ohlc rate = m_dicPersistentOHLC[key].GetShift(nShift);
+                return m_TFEngine.FindIndexOf(sTF, rate);
+            }
+            catch { return -1; }
+        }
+        bool _check(string sTimeFrame, string sPattern, string sShift)
+        {
+            return check(sTimeFrame, sPattern, int.Parse(sShift)) || checkState(sTimeFrame, sPattern, int.Parse(sShift));
+        }
+        void _set(string sTimeFrame, string sPattern)
+        {
+            setState(sTimeFrame, sPattern);
+            var key = Tuple.Create(sTimeFrame, sPattern);
+            if (!m_dicPersistentOHLC.ContainsKey(key))
+            {
+                m_dicPersistentOHLC[key] = new PersistentOhlc();
+                m_dicPersistentOHLC[key].nMaxSize = Global.PERSIST_STATE_CACHE_MAX_SIZE;
+            }
+            if (sTimeFrame.StartsWith("Trend"))
+            {
+                m_dicPersistentOHLC[key].Append(m_TFEngine.GetOhlc("M1"));
+            }
+            else
+            {
+                m_dicPersistentOHLC[key].Append(m_TFEngine.GetOhlc(sTimeFrame));
+            }
+        }
     }
 }

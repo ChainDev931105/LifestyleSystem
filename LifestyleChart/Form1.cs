@@ -98,6 +98,7 @@ namespace LifestyleChart
                 if (m_dataPnt.ContainsKey(m_activePntKey)) m_dataPnt[m_activePntKey].Prepare();
             }
         }
+
         private void btn_draw_ind_Click(int id)
         {
             if (cmb_ind.Text.Contains(':'))
@@ -138,7 +139,6 @@ namespace LifestyleChart
         {
             updateChart();
         }
-
 
         private void onReceiveGroup(string sGroupMsg)
         {
@@ -300,6 +300,16 @@ namespace LifestyleChart
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+
+        private void btn_clear_levels_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                m_activePntKey = Tuple.Create("", "");
+                ucSciStockChart1.ClearAllPnt();
+            }
+            catch { }
         }
     }
 }

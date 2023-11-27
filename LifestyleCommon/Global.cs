@@ -22,6 +22,7 @@ namespace LifestyleCommon
         public const double EPS = 1e-5;
         public const string MQ_TOPIC_CHART2TRADER = "CHART_TO_TRADER";
         public const string MQ_TOPIC_TRADER2CHART = "TRADER_TO_CHART";
+        public const int PERSIST_STATE_CACHE_MAX_SIZE = 30;
 
         // Util functions
         public static DateTime UnixSecondsToDateTime(long unixTimeStamp)

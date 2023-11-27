@@ -11,7 +11,7 @@ namespace LifestyleTrader
     {
         Symbol m_symbol = null;
         string m_sStrategyID = "";
-        Dictionary<string, TimeFrame> m_dicTF = new Dictionary<string, TimeFrame>();
+        public Dictionary<string, TimeFrame> m_dicTF = new Dictionary<string, TimeFrame>();
         double m_dAsk;
         double m_dBid;
         public long m_time;
@@ -71,6 +71,15 @@ namespace LifestyleTrader
             if (!m_dicOHLC.ContainsKey(sTF)) return null;
             if (m_dicOHLC[sTF].Count < nShift + 1 || nShift < 0) return null;
             return m_dicOHLC[sTF][m_dicOHLC[sTF].Count - nShift - 1];
+        }
+
+        public int FindIndexOf(string sTF, Ohlc rate)
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                if (GetOhlc(sTF, i).time == rate.time) return i + 1;
+            }
+            return -1;
         }
 
         public List<string> TFList()

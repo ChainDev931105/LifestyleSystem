@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Logic.cs" />
     <Compile Include="Logic0.cs" />
+    <Compile Include="Logic1.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

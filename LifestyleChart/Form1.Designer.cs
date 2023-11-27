@@ -36,14 +36,15 @@
             this.cmb_price = new System.Windows.Forms.ComboBox();
             this.cmb_pnt = new System.Windows.Forms.ComboBox();
             this.cmb_ind = new System.Windows.Forms.ComboBox();
-            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
-            this.ucSciStockChart1 = new WpfSciStockChart.ucSciStockChart();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.btn_clear = new System.Windows.Forms.Button();
             this.txt_bug = new System.Windows.Forms.TextBox();
             this.btn_draw_ind1 = new System.Windows.Forms.Button();
             this.btn_draw_ind2 = new System.Windows.Forms.Button();
             this.btn_draw_ind3 = new System.Windows.Forms.Button();
+            this.btn_clear_levels = new System.Windows.Forms.Button();
+            this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.ucSciStockChart1 = new WpfSciStockChart.ucSciStockChart();
             this.SuspendLayout();
             // 
             // btn_connect
@@ -78,7 +79,7 @@
             // 
             // btn_draw_ind0
             // 
-            this.btn_draw_ind0.Location = new System.Drawing.Point(914, 12);
+            this.btn_draw_ind0.Location = new System.Drawing.Point(716, 41);
             this.btn_draw_ind0.Name = "btn_draw_ind0";
             this.btn_draw_ind0.Size = new System.Drawing.Size(75, 23);
             this.btn_draw_ind0.TabIndex = 3;
@@ -110,15 +111,6 @@
             this.cmb_ind.Size = new System.Drawing.Size(192, 21);
             this.cmb_ind.TabIndex = 6;
             // 
-            // elementHost1
-            // 
-            this.elementHost1.Location = new System.Drawing.Point(20, 41);
-            this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(1328, 524);
-            this.elementHost1.TabIndex = 7;
-            this.elementHost1.Text = "elementHost1";
-            this.elementHost1.Child = this.ucSciStockChart1;
-            // 
             // timer1
             // 
             this.timer1.Enabled = true;
@@ -127,7 +119,7 @@
             // 
             // btn_clear
             // 
-            this.btn_clear.Location = new System.Drawing.Point(1273, 10);
+            this.btn_clear.Location = new System.Drawing.Point(1084, 12);
             this.btn_clear.Name = "btn_clear";
             this.btn_clear.Size = new System.Drawing.Size(75, 23);
             this.btn_clear.TabIndex = 8;
@@ -146,7 +138,7 @@
             // 
             // btn_draw_ind1
             // 
-            this.btn_draw_ind1.Location = new System.Drawing.Point(995, 12);
+            this.btn_draw_ind1.Location = new System.Drawing.Point(797, 41);
             this.btn_draw_ind1.Name = "btn_draw_ind1";
             this.btn_draw_ind1.Size = new System.Drawing.Size(75, 23);
             this.btn_draw_ind1.TabIndex = 3;
@@ -156,7 +148,7 @@
             // 
             // btn_draw_ind2
             // 
-            this.btn_draw_ind2.Location = new System.Drawing.Point(1076, 12);
+            this.btn_draw_ind2.Location = new System.Drawing.Point(878, 41);
             this.btn_draw_ind2.Name = "btn_draw_ind2";
             this.btn_draw_ind2.Size = new System.Drawing.Size(75, 23);
             this.btn_draw_ind2.TabIndex = 3;
@@ -166,7 +158,7 @@
             // 
             // btn_draw_ind3
             // 
-            this.btn_draw_ind3.Location = new System.Drawing.Point(1157, 12);
+            this.btn_draw_ind3.Location = new System.Drawing.Point(959, 41);
             this.btn_draw_ind3.Name = "btn_draw_ind3";
             this.btn_draw_ind3.Size = new System.Drawing.Size(75, 23);
             this.btn_draw_ind3.TabIndex = 3;
@@ -174,11 +166,31 @@
             this.btn_draw_ind3.UseVisualStyleBackColor = true;
             this.btn_draw_ind3.Click += new System.EventHandler(this.btn_draw_ind3_Click);
             // 
+            // btn_clear_levels
+            // 
+            this.btn_clear_levels.Location = new System.Drawing.Point(404, 41);
+            this.btn_clear_levels.Name = "btn_clear_levels";
+            this.btn_clear_levels.Size = new System.Drawing.Size(75, 23);
+            this.btn_clear_levels.TabIndex = 10;
+            this.btn_clear_levels.Text = "Clear Labels";
+            this.btn_clear_levels.UseVisualStyleBackColor = true;
+            this.btn_clear_levels.Click += new System.EventHandler(this.btn_clear_levels_Click);
+            // 
+            // elementHost1
+            // 
+            this.elementHost1.Location = new System.Drawing.Point(12, 70);
+            this.elementHost1.Name = "elementHost1";
+            this.elementHost1.Size = new System.Drawing.Size(1147, 541);
+            this.elementHost1.TabIndex = 7;
+            this.elementHost1.Text = "elementHost1";
+            this.elementHost1.Child = this.ucSciStockChart1;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1355, 597);
+            this.ClientSize = new System.Drawing.Size(1171, 623);
+            this.Controls.Add(this.btn_clear_levels);
             this.Controls.Add(this.txt_bug);
             this.Controls.Add(this.btn_clear);
             this.Controls.Add(this.elementHost1);
@@ -218,6 +230,7 @@
         private System.Windows.Forms.Button btn_draw_ind1;
         private System.Windows.Forms.Button btn_draw_ind2;
         private System.Windows.Forms.Button btn_draw_ind3;
+        private System.Windows.Forms.Button btn_clear_levels;
     }
 }
 

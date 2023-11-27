@@ -32,11 +32,16 @@ namespace LifestyleTrader
     class PersistentOhlc
     {
         List<Ohlc> m_lstOhlc = new List<Ohlc>();
+        public int nMaxSize = 100000;
 
         public bool Append(Ohlc ohlc)
         {
             if (m_lstOhlc.Count > 0 && m_lstOhlc[m_lstOhlc.Count - 1].time == ohlc.time) return false;
             m_lstOhlc.Add(ohlc);
+            if (nMaxSize < m_lstOhlc.Count)
+            {
+                m_lstOhlc.RemoveAt(0);
+            }
             return true;
         }
 
@@ -47,7 +52,7 @@ namespace LifestyleTrader
 
         public Ohlc GetShift(int nShift)
         {
-            return m_lstOhlc[m_lstOhlc.Count - nShift];
+            return m_lstOhlc[m_lstOhlc.Count - nShift - 1];
         }
     }
 
