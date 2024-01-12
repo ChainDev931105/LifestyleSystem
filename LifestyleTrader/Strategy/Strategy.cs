@@ -445,7 +445,7 @@ namespace LifestyleTrader
             bool bRlt = true;
             if (Manager.g_eMode == RUN_MODE.REAL_TRADE)
             {
-                bRlt = Manager.g_broker.RequestOrder(symbol, cmd, ref dLots, ref dPrice);
+                // bRlt = Manager.g_broker.RequestOrder(symbol, cmd, ref dLots, ref dPrice);
             }
             m_evaluation.RequestOrder(symbol.m_sSymbol, cmd, dLots, dPrice);
             return bRlt;
