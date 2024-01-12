@@ -25,6 +25,7 @@ namespace LifestyleTrader
         private static bool g_bRunning = false;
         private static DateTime g_dtLastDisplayState = new DateTime();
         public static DateTime g_dtCurTime = new DateTime();
+        private static Dictionary<long, bool> g_exist = new Dictionary<long, bool>();
 
         public static void Init(Form1 form)
         {
@@ -98,12 +99,13 @@ namespace LifestyleTrader
                 }
                 else if (eMode == RUN_MODE.REAL_TRADE)
                 {
+                    g_broker.Connect(g_mainConfig.m_sIB_Host, g_mainConfig.m_nIB_Port, g_mainConfig.m_nIB_ID);
                     runRealTrade();
                 }
                 else if (eMode == RUN_MODE.MERGE_MODE)
                 {
-                    runBacktest(dtStart, dtEnd);
-                    runRealTrade();
+                    g_broker.Connect(g_mainConfig.m_sIB_Host, g_mainConfig.m_nIB_Port, g_mainConfig.m_nIB_ID);
+                    runMergedMode(dtStart);
                 }
             })).Start();
         }
@@ -149,7 +151,8 @@ namespace LifestyleTrader
         private static void runRealTrade()
         {
             g_eMode = RUN_MODE.REAL_TRADE;
-            g_broker.Connect(g_mainConfig.m_sIB_Host, g_mainConfig.m_nIB_Port, g_mainConfig.m_nIB_ID);
+
+            long minuteLast = 0;
             while (g_bRunning)
             {
                 Tick tick = g_broker.GetRate(g_strategy.symbol());
@@ -161,8 +164,122 @@ namespace LifestyleTrader
                 g_mainForm.DisplayState(string.Format("{0},{1},{2}", tick.time, tick.ask, tick.bid));
                 g_dtCurTime = DateTime.Now;
                 g_strategy.PushTick(tick);
+                long minuteCurrent = tick.time / 60 * 60;
+                if (minuteCurrent > minuteLast)
+                {
+                    if (minuteLast != 0)
+                    {
+                        Ohlc ohlc = g_strategy.m_TFEngine.GetOhlc("M1", 1);
+                        lock (g_database)
+                        {
+                            g_database.Save(g_strategy.SymbolEx(), new List<Ohlc>() { ohlc });
+                        }
+                    }
+                    minuteLast = minuteCurrent;
+                    g_strategy.OnTick();
+                }
                 Thread.Sleep(100);
             }
+        }
+
+        private static void runMergedMode(DateTime dtStart)
+        {
+            List<Ohlc> lstOriginalData = g_database.Load(g_strategy.SymbolEx(), dtStart, DateTime.Now);
+            long rateExist = 0;
+            lock (g_exist)
+            {
+                foreach (var ohlc in lstOriginalData)
+                {
+                    g_exist[ohlc.time] = true;
+                    rateExist = Math.Max(rateExist, ohlc.time);
+                }
+            }
+
+            List<Ohlc> lstOhlc = new List<Ohlc>();
+
+            bool bStarted = false;
+
+            g_broker.SetHisUpdateAction(new Action<string, string, double, double, double, double>((s, t, o, h, l, c) =>
+            {
+                long lTime = Global.UnixDateTimeToSeconds(Global.ParseDate(t));
+                lock (g_exist)
+                {
+                    if (g_exist.ContainsKey(lTime)) return;
+                    g_exist[lTime] = true;
+                }
+                lock (g_database)
+                {
+                    g_database.Save(s, new List<Ohlc>() {
+                        new Ohlc()
+                        {
+                            time = lTime,
+                            open = o,
+                            high = h,
+                            low = l,
+                            close = c
+                        }
+                    });
+                }
+                if (bStarted)
+                {
+                    lock (lstOhlc)
+                    {
+                        for (int i = lstOhlc.Count - 1; i >= 0; i--)
+                        {
+                            if (lstOhlc[i].time == lTime) break;
+                            if (lstOhlc[i].time < lTime)
+                            {
+                                lstOhlc.Insert(i + 1, new Ohlc()
+                                {
+                                    time = lTime,
+                                    open = o,
+                                    high = h,
+                                    low = l,
+                                    close = c
+                                });
+                                break;
+                            }
+                        }
+                    }
+                }
+            }));
+
+            for (DateTime dtDay = dtStart; dtDay < DateTime.Now.AddHours(2); dtDay = dtDay.AddHours(2))
+            {
+                long lTime = Global.UnixDateTimeToSeconds(dtDay);
+                if (lTime < rateExist - 60 * 60 * 4)
+                {
+                    continue;
+                }
+                PutLog(string.Format("Get Historical Data {0},{1}", g_strategy.symbol(), dtDay));
+                g_broker.GetHistoricalData(g_strategy.symbol(), dtDay);
+                Thread.Sleep(2000);
+            }
+
+            Thread.Sleep(5000);
+
+            g_eMode = RUN_MODE.BACKTEST;
+            lstOhlc = g_database.Load(g_strategy.SymbolEx(), dtStart, DateTime.Now);
+            bStarted = true;
+            int nTot = lstOhlc.Count;
+            int nCur = 0;
+            PutLog("Load rates finished, total ticks = " + nTot);
+            foreach (var ohlc in lstOhlc)
+            {
+                if (!g_bRunning) break;
+                g_dtCurTime = Global.UnixSecondsToDateTime(ohlc.time);
+                g_strategy.PushOhlc(ohlc);
+                g_strategy.OnTick();
+                nCur++;
+                double dPercent = 1.0 * nCur / nTot;
+                g_mainForm.DisplayPerformance(string.Format("{0} %, {1}",
+                    ((int)(dPercent * 100 + 0.5)).ToString(), g_dtCurTime.ToString("yyyy-MM-dd HH:mm:ss")));
+            }
+            g_mainForm.DisplayPerformance(string.Format("100 %, {0}",
+                g_dtCurTime.ToString("yyyy-MM-dd HH:mm:ss")), true);
+            PutLog("Backtest finished, moving to live mode");
+
+            runRealTrade();
         }
     }
 }

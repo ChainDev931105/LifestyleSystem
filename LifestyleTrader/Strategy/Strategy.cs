@@ -12,7 +12,7 @@ namespace LifestyleTrader
     class Strategy
     {
         private string m_sStrategyID = "";
-        private TFEngine m_TFEngine = null;
+        public TFEngine m_TFEngine = null;
         private Symbol m_symbol = null;
         private Dictionary<Tuple<string, string>, PersistentOhlc> m_dicPersistentOHLC = new Dictionary<Tuple<string, string>, PersistentOhlc>();
         private double m_dDefaultRate = 0;
