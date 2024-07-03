@@ -4,41 +4,39 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace LifestyleStrategy
 {
     public class Logic1 : Logic
     {//public class open bracket
         public override void OnTick()
         {
-            // zzz2();   can add function here
+            // step 1: declare a list
+            var list = new List<double>() { };
 
-            foreach (var sTF in ALL_TIMEFRAMES)
+            // step 2: add values to the list, you can add as many values as you want
+            list.Add(_value("M5", "UBU", "C", "0"));
+            list.Add(_value("M5", "UBU", "C", "1"));
+            list.Add(_value("M5", "UBU", "C", "2"));
+            list.Add(_value("M5", "UBU", "C", "3"));
+
+            // step 3: sort list, then the array is sorted from smallest to biggest
+            list.Sort();
+
+            // Check if the current M1 close value is below than minimum
+            if (_value("M1", "", "C", "0") < list[0])
             {
-
-            } ///close stf
-
-
-            //}//public class close bracket
-
-            // public void zzz2()
-            {
-                //  if Time = Hurr= 13:  
-
-                //   Valuex= M15 = US1 the M5 = DBD
-
-            }
-        }
-
-        void MMM240()
-        {
-            //this is  the first layer 
-            if (_check("M6", "DS1", "1") && (_check("M5", "DS1", "1") && (_check("M4", "DS1", "1")
-             && (_check("M3", "DS1", "1") && (_check("M2", "DS1", "1")))))) ;
-            {
-                _set("M3", "UB");
-                //_plot_pnt("UB", _value("M15", "", "C", "1"), "UB_" + _value("M15", "", "C", "1"), "M15");
+                // You can write some code
             }
 
+            // Check if the current M1 high value is bigger than maximum
+            if (_value("M1", "", "H", "0") < list[list.Count - 1])
+            {
+                // You can write some code
+            }
+
+
         }
-    }
-}
+    }//Public void
+} //Namespace
+

@@ -29,6 +29,8 @@ namespace LifestyleStrategy
 
         public Action<string, string> _set = new Action<string, string>((x, y) => { });
 
+        public Action<string, string, double, double> _print_to_table = new Action<string, string, double, double>((x, y, z, t) => { });
+
         public virtual void OnTick()
         {
 

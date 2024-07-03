@@ -91,21 +91,33 @@ namespace LifestyleTrader
 
             (g_mainThread = new Thread(() =>
             {
-                g_bRunning = true;
-                if (eMode == RUN_MODE.BACKTEST)
+                try
                 {
-                    runBacktest(dtStart, dtEnd);
-                    g_mainForm.OnStop();
+                    g_bRunning = true;
+                    if (eMode == RUN_MODE.BACKTEST)
+                    {
+                        runBacktest(dtStart, dtEnd);
+                        g_mainForm.OnStop();
+                    }
+                    else if (eMode == RUN_MODE.REAL_TRADE)
+                    {
+                        g_broker.Connect(g_mainConfig.m_sIB_Host, g_mainConfig.m_nIB_Port, g_mainConfig.m_nIB_ID);
+                        runRealTrade();
+                    }
+                    else if (eMode == RUN_MODE.MERGE_MODE)
+                    {
+                        g_broker.Connect(g_mainConfig.m_sIB_Host, g_mainConfig.m_nIB_Port, g_mainConfig.m_nIB_ID);
+                        runMergedMode(dtStart);
+                    }
                 }
-                else if (eMode == RUN_MODE.REAL_TRADE)
+                catch (Exception e)
                 {
-                    g_broker.Connect(g_mainConfig.m_sIB_Host, g_mainConfig.m_nIB_Port, g_mainConfig.m_nIB_ID);
-                    runRealTrade();
-                }
-                else if (eMode == RUN_MODE.MERGE_MODE)
-                {
-                    g_broker.Connect(g_mainConfig.m_sIB_Host, g_mainConfig.m_nIB_Port, g_mainConfig.m_nIB_ID);
-                    runMergedMode(dtStart);
+                    PutLog(e.ToString());
+                    if (e.InnerException != null)
+                    {
+                        PutLog(e.InnerException.ToString());
+                    }
+                    throw e;
                 }
             })).Start();
         }
@@ -260,12 +272,18 @@ namespace LifestyleTrader
 
             g_eMode = RUN_MODE.BACKTEST;
             lstOhlc = g_database.Load(g_strategy.SymbolEx(), dtStart, DateTime.Now);
+            PutLog("Load rates finished, total ticks = " + lstOhlc.Count);
             bStarted = true;
-            int nTot = lstOhlc.Count;
             int nCur = 0;
-            PutLog("Load rates finished, total ticks = " + nTot);
-            foreach (var ohlc in lstOhlc)
+            for (int i = 0; ; i++)
             {
+                Ohlc ohlc;
+                int nTot = 0;
+                lock (lstOhlc)
+                {
+                    nTot = lstOhlc.Count;
+                    ohlc = lstOhlc[i];
+                }
                 if (!g_bRunning) break;
                 g_dtCurTime = Global.UnixSecondsToDateTime(ohlc.time);
                 g_strategy.PushOhlc(ohlc);
@@ -274,6 +292,10 @@ namespace LifestyleTrader
                 double dPercent = 1.0 * nCur / nTot;
                 g_mainForm.DisplayPerformance(string.Format("{0} %, {1}",
                     ((int)(dPercent * 100 + 0.5)).ToString(), g_dtCurTime.ToString("yyyy-MM-dd HH:mm:ss")));
+                lock (lstOhlc)
+                {
+                    if (i >= lstOhlc.Count - 1) break;
+                }
             }
             g_mainForm.DisplayPerformance(string.Format("100 %, {0}",
                 g_dtCurTime.ToString("yyyy-MM-dd HH:mm:ss")), true);

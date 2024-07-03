@@ -20,10 +20,11 @@ namespace LifestyleTrader
         ListView m_listView_pos = null;
         ListView m_listView_eval = null;
         ListView m_listView_his = null;
+        ListView m_listView_tf = null;
 
         public Evaluation()
         {
-            Manager.g_mainForm.GetListViews(ref m_listView_pos, ref m_listView_eval, ref m_listView_his);
+            Manager.g_mainForm.GetListViews(ref m_listView_pos, ref m_listView_eval, ref m_listView_his, ref m_listView_tf);
             Init();
         }
 
@@ -111,6 +112,34 @@ namespace LifestyleTrader
                 m_listView_eval.Items.Add(item);
             }
             m_listView_eval.EndUpdate();
+        }
+
+        public void PrintToTable(string sTimeframe, string sState, double dPrice, double dPips)
+        {
+            m_listView_tf.BeginUpdate();
+            bool bFind = false;
+            for (int i = 0; i < m_listView_tf.Items.Count; i++)
+            {
+                var item = m_listView_tf.Items[i];
+                if (item.Text == sTimeframe)
+                {
+                    bFind = true;
+                    m_listView_tf.Items.RemoveAt(i);
+                    break;
+                }
+            }
+            {
+                ListViewItem item = new ListViewItem() { Text = sTimeframe };
+                item.SubItems.Add(sState);
+                item.SubItems.Add(dPrice.ToString());
+                item.SubItems.Add(Math.Floor(dPips).ToString() + " pips");
+                m_listView_tf.Items.Insert(0, item);
+            }
+            if (!bFind && m_listView_tf.Items.Count > 30)
+            {
+                m_listView_tf.Items.RemoveAt(m_listView_tf.Items.Count - 1);
+            }
+            m_listView_tf.EndUpdate();
         }
 
         private ListViewItem posToItem(Position pos)

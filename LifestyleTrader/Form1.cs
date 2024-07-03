@@ -14,6 +14,9 @@ namespace LifestyleTrader
     {
         private DateTime g_dtLastPerfUpdate = new DateTime();
         private object m_oLock = null;
+        private DetailForm m_detailForm = new DetailForm();
+
+
         public Form1()
         {
             InitializeComponent();
@@ -166,16 +169,22 @@ namespace LifestyleTrader
             }
         }
 
-        public void GetListViews(ref ListView listView_pos, ref ListView listView_eval, ref ListView listView_his)
+        public void GetListViews(ref ListView listView_pos, ref ListView listView_eval, ref ListView listView_his, ref ListView listView_tf)
         {
             listView_pos = this.listView_pos;
             listView_eval = this.listView_eval;
             listView_his = this.listView_his;
+            listView_tf = this.listView_tf;
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+
+        private void btn_detailForm_Click(object sender, EventArgs e)
+        {
+            m_detailForm.Show();
         }
     }
 }

@@ -47,6 +47,12 @@
             this.cmb_symbol = new System.Windows.Forms.ComboBox();
             this.btn_eval = new System.Windows.Forms.Button();
             this.panel_eval = new System.Windows.Forms.Panel();
+            this.label10 = new System.Windows.Forms.Label();
+            this.listView_tf = new System.Windows.Forms.ListView();
+            this.col_tf = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_state = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_price = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.col_pips = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -65,6 +71,7 @@
             this.col_lots_ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.col_price_ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.col_time_ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.btn_detailForm = new System.Windows.Forms.Button();
             this.panel_eval.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,7 +87,7 @@
             // 
             // btn_stop
             // 
-            this.btn_stop.Location = new System.Drawing.Point(342, 45);
+            this.btn_stop.Location = new System.Drawing.Point(342, 46);
             this.btn_stop.Name = "btn_stop";
             this.btn_stop.Size = new System.Drawing.Size(75, 23);
             this.btn_stop.TabIndex = 1;
@@ -90,7 +97,7 @@
             // 
             // btn_chart
             // 
-            this.btn_chart.Location = new System.Drawing.Point(313, 74);
+            this.btn_chart.Location = new System.Drawing.Point(313, 75);
             this.btn_chart.Name = "btn_chart";
             this.btn_chart.Size = new System.Drawing.Size(104, 23);
             this.btn_chart.TabIndex = 2;
@@ -100,7 +107,7 @@
             // 
             // btn_clear
             // 
-            this.btn_clear.Location = new System.Drawing.Point(342, 145);
+            this.btn_clear.Location = new System.Drawing.Point(342, 162);
             this.btn_clear.Name = "btn_clear";
             this.btn_clear.Size = new System.Drawing.Size(75, 23);
             this.btn_clear.TabIndex = 3;
@@ -165,11 +172,11 @@
             // 
             this.txt_log.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.txt_log.Location = new System.Drawing.Point(12, 145);
+            this.txt_log.Location = new System.Drawing.Point(12, 162);
             this.txt_log.Multiline = true;
             this.txt_log.Name = "txt_log";
             this.txt_log.ReadOnly = true;
-            this.txt_log.Size = new System.Drawing.Size(405, 378);
+            this.txt_log.Size = new System.Drawing.Size(405, 361);
             this.txt_log.TabIndex = 10;
             // 
             // txt_perf
@@ -221,7 +228,7 @@
             // 
             // btn_eval
             // 
-            this.btn_eval.Location = new System.Drawing.Point(326, 109);
+            this.btn_eval.Location = new System.Drawing.Point(326, 104);
             this.btn_eval.Name = "btn_eval";
             this.btn_eval.Size = new System.Drawing.Size(91, 23);
             this.btn_eval.TabIndex = 17;
@@ -231,6 +238,8 @@
             // 
             // panel_eval
             // 
+            this.panel_eval.Controls.Add(this.label10);
+            this.panel_eval.Controls.Add(this.listView_tf);
             this.panel_eval.Controls.Add(this.label9);
             this.panel_eval.Controls.Add(this.label8);
             this.panel_eval.Controls.Add(this.label7);
@@ -239,8 +248,52 @@
             this.panel_eval.Controls.Add(this.listView_his);
             this.panel_eval.Location = new System.Drawing.Point(423, 17);
             this.panel_eval.Name = "panel_eval";
-            this.panel_eval.Size = new System.Drawing.Size(642, 506);
+            this.panel_eval.Size = new System.Drawing.Size(912, 506);
             this.panel_eval.TabIndex = 18;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(628, 5);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(61, 13);
+            this.label10.TabIndex = 7;
+            this.label10.Text = "Timeframes";
+            // 
+            // listView_tf
+            // 
+            this.listView_tf.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listView_tf.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.col_tf,
+            this.col_state,
+            this.col_price,
+            this.col_pips});
+            this.listView_tf.GridLines = true;
+            this.listView_tf.HideSelection = false;
+            this.listView_tf.Location = new System.Drawing.Point(631, 25);
+            this.listView_tf.Name = "listView_tf";
+            this.listView_tf.Size = new System.Drawing.Size(268, 481);
+            this.listView_tf.TabIndex = 6;
+            this.listView_tf.UseCompatibleStateImageBehavior = false;
+            this.listView_tf.View = System.Windows.Forms.View.Details;
+            // 
+            // col_tf
+            // 
+            this.col_tf.Text = "Timeframe";
+            // 
+            // col_state
+            // 
+            this.col_state.Text = "State";
+            // 
+            // col_price
+            // 
+            this.col_price.Text = "Price";
+            this.col_price.Width = 80;
+            // 
+            // col_pips
+            // 
+            this.col_pips.Text = "Pips";
             // 
             // label9
             // 
@@ -371,11 +424,22 @@
             this.col_time_.Text = "Time";
             this.col_time_.Width = 120;
             // 
+            // btn_detailForm
+            // 
+            this.btn_detailForm.Location = new System.Drawing.Point(342, 133);
+            this.btn_detailForm.Name = "btn_detailForm";
+            this.btn_detailForm.Size = new System.Drawing.Size(75, 23);
+            this.btn_detailForm.TabIndex = 19;
+            this.btn_detailForm.Text = "Timeframes";
+            this.btn_detailForm.UseVisualStyleBackColor = true;
+            this.btn_detailForm.Click += new System.EventHandler(this.btn_detailForm_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1063, 535);
+            this.ClientSize = new System.Drawing.Size(1335, 535);
+            this.Controls.Add(this.btn_detailForm);
             this.Controls.Add(this.panel_eval);
             this.Controls.Add(this.btn_eval);
             this.Controls.Add(this.cmb_symbol);
@@ -444,6 +508,13 @@
         private System.Windows.Forms.ColumnHeader col_time_;
         private System.Windows.Forms.ColumnHeader col_name;
         private System.Windows.Forms.ColumnHeader col_value;
+        private System.Windows.Forms.ListView listView_tf;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ColumnHeader col_tf;
+        private System.Windows.Forms.ColumnHeader col_state;
+        private System.Windows.Forms.ColumnHeader col_price;
+        private System.Windows.Forms.ColumnHeader col_pips;
+        private System.Windows.Forms.Button btn_detailForm;
     }
 }
 

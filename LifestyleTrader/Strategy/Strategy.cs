@@ -464,6 +464,7 @@ namespace LifestyleTrader
             m_logic._value = _value;
             m_logic._find= _find;
             m_logic._set = _set;
+            m_logic._print_to_table = _print_to_table;
         }
 
         void logic_ontick()
@@ -558,6 +559,11 @@ namespace LifestyleTrader
             {
                 m_dicPersistentOHLC[key].Append(m_TFEngine.GetOhlc(sTimeFrame));
             }
+        }
+
+        void _print_to_table(string sTimeframe, string sState, double dPrice, double dPips)
+        {
+            m_evaluation.PrintToTable(sTimeframe, sState, dPrice, dPips);
         }
     }
 }
